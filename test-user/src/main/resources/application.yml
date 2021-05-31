@@ -1,0 +1,4 @@
+server:
+  port: 8000
+user:
+  username: ${random.int[5000,6000]}
