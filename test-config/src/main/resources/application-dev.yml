@@ -1,0 +1,7 @@
+server:
+  port: 8002
+test:
+  age: 18
+  email: dev@qq.com
+  webSite: dev.com
+  password: dev123456

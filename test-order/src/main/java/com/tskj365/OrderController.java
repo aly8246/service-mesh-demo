@@ -25,6 +25,7 @@ public class OrderController {
         return Flux.just("user service response：{"+body+"} and order service response successful.");
     }
 
+
     @GetMapping("/health")
     public Mono<ResponseEntity<String>> health() {
         HttpHeaders headers = new HttpHeaders();

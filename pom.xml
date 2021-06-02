@@ -19,6 +19,7 @@
 	<modules>
 		<module>test-user</module>
 		<module>test-order</module>
+		<module>test-config</module>
 	</modules>
 
 	<properties>

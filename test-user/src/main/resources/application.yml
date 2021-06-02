@@ -1,4 +1,5 @@
-server:
-  port: 8000
+spring:
+  profiles:
+    active: dev
 user:
   username: ${random.int[5000,6000]}

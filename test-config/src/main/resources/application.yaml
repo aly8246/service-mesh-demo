@@ -1,0 +1,13 @@
+server:
+  port: 8000
+spring:
+  profiles:
+    active: dev
+  application:
+    name: test-config
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

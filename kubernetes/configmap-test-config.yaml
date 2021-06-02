@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: test-config
+  namespace: test
+data:
+  application-dev.yml: |
+    server:
+      port: 8000
+    test:
+      age: 20
+      email: test@qq.com
+      webSite: test.com
+      password: test123456

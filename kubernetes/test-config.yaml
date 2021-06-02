@@ -1,0 +1,92 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: config
+  labels:
+    app: config
+    service: config
+spec:
+  ports:
+    - port: 8000
+      name: http
+  selector:
+    app: config
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: config
+  labels:
+    account: config
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: config
+  labels:
+    app: config
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: config
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: config
+        version: v1
+    spec:
+      serviceAccountName: config
+      volumes:
+        - name: test-config
+          configMap:
+            name: test-config
+      containers:
+        - name: config
+          image: registry.cn-hangzhou.aliyuncs.com/tskj-faas/test-config:0.0.1-SNAPSHOT
+          imagePullPolicy: Always
+          args: ["--spring.config.location=/opt/application-dev.yml"]
+          ports:
+            - containerPort: 8000
+          securityContext:
+            runAsUser: 1000
+          volumeMounts:
+            - name: test-config
+              mountPath: /opt/application-dev.yml
+              subPath: application-dev.yml
+          livenessProbe:
+            httpGet:
+              path: "/actuator/health/liveness"
+              port: 8000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 3
+            successThreshold: 1
+            failureThreshold: 5
+          readinessProbe:
+            httpGet:
+              path: "/actuator/health/readiness"
+              port: 8000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 3
+            successThreshold: 1
+            failureThreshold: 5
+
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: config-ingress
+spec:
+  rules:
+    - host: config.test.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: config
+              servicePort: 8000
